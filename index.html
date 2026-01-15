@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitcoin Co. | Institutional Terminal</title>
+<style>
+        :root {
+            --primary: #f7931a; --bg: #05070a; --card: #12151c; --text: #eaeaeb;
+            --secondary: #848e9c; --success: #0ecb81; --danger: #f6465d; --border: #2b3139;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+
+        nav { width: 70px; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 25px 0; }
+        .nav-icon { width: 45px; height: 45px; border-radius: 12px; margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--secondary); font-size: 1.3rem; }
+        .nav-icon.active { background: rgba(247, 147, 26, 0.1); color: var(--primary); border: 1px solid var(--primary); }
+
+        main { flex: 1; display: grid; grid-template-columns: 1fr 380px; grid-template-rows: 70px 1fr; }
+        header { grid-column: 1 / 3; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 30px; justify-content: space-between; background: var(--card); }
+        .badge { background: rgba(14, 203, 129, 0.1); color: var(--success); padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-left: 10px; border: 1px solid var(--success); }
+
+        .content-area { padding: 25px; overflow-y: auto; }
+        .balance-hero { background: radial-gradient(circle at top left, #1c202e, #12151c); padding: 45px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        /* Pending Status Bar */
+        #pending-bar { display: none; background: rgba(247, 147, 26, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.85rem; text-align: center; font-weight: 600; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-box { background: var(--card); padding: 18px; border-radius: 12px; border: 1px solid var(--border); }
+
+        .side-panel { background: var(--card); border-left: 1px solid var(--border); padding: 25px; display: flex; flex-direction: column; gap: 20px; }
+        .trade-box { background: var(--bg); padding: 22px; border-radius: 15px; border: 1px solid var(--border); }
+        .trade-input { width: 100%; background: #1e2329; border: 1px solid var(--border); padding: 14px; color: white; border-radius: 8px; margin: 12px 0; outline: none; }
+
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn-buy { background: var(--success); color: white; margin-bottom: 12px; }
+        .btn-sell { background: var(--danger); color: white; }
+        .btn-withdraw { background: transparent; color: var(--primary); border: 2px solid var(--primary); margin-top: 15px; }
+
+        /* OTP Input Styling */
+        .otp-container { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
+        .otp-input { width: 45px; height: 55px; background: #1e2329; border: 1px solid var(--border); border-radius: 8px; color: white; text-align: center; font-size: 1.5rem; font-weight: bold; }
+
+        #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.98); display: none; z-index: 1000; align-items: center; justify-content: center; }
+        .modal { background: var(--card); padding: 45px; border-radius: 25px; border: 1px solid var(--border); width: 95%; max-width: 440px; text-align: center; }
+</style>
+</head>
+<body>
+
+<nav>
+<div class="nav-icon active">💎</div>
+<div class="nav-icon">📊</div>
+<div class="nav-icon">🛡️</div>
+</nav>
+
+<main>
+<header>
+<div style="font-weight: 900; color: var(--primary); letter-spacing: 2px;">BITCOIN CO. <span style="font-weight: 200; color: white;">INSTITUTIONAL</span></div>
+<div>Thomas Graziani <span class="badge">KYC VERIFIED</span></div>
+</header>
+
+<section class="content-area">
+<div id="pending-bar">⚠️ TRANSACTION PENDING: Verification Required for Withdrawal</div>
+
+<div class="balance-hero">
+<p style="color: var(--secondary); font-size: 0.75rem; letter-spacing: 3px;">TOTAL ASSETS</p>
+<h1 id="main-balance" style="font-size: 3.5rem; margin: 15px 0; color: white; font-weight: 800;">$120,000,000.00</h1>
+</div>
+
+<div class="stat-grid">
+<div class="stat-box">
+<p style="color: var(--secondary); font-size: 0.65rem;">LIVE BTC</p>
+<h3 id="live-price" style="color: var(--primary)">$98,420.10</h3>
+</div>
+<div class="stat-box"><p style="color: var(--secondary); font-size: 0.65rem;">SENTIMENT</p><h3 style="color: var(--success)">BULLISH</h3></div>
+<div class="stat-box"><p style="color: var(--secondary); font-size: 0.65rem;">RANK</p><h3>#1,204</h3></div>
+<div class="stat-box"><p style="color: var(--secondary); font-size: 0.65rem;">SECURITY</p><h3 style="color: var(--success)">ACTIVE</h3></div>
+</div>
+</section>
+
+<section class="side-panel">
+<div class="trade-box">
+<h4>QUICK TRADE</h4>
+<input type="number" class="trade-input" id="trade-amt" placeholder="Amount ($)">
+<button class="btn btn-buy" onclick="executeTrade('BUY')">BUY</button>
+<button class="btn btn-sell" onclick="executeTrade('SELL')">SELL</button>
+</div>
+<div class="trade-box">
+<h4>CAPITAL MGMT</h4>
+<button class="btn btn-withdraw" onclick="openModal()">WITHDRAWAL PORTAL</button>
+</div>
+</section>
+</main>
+
+<div id="overlay">
+<div id="withdraw-modal" class="modal">
+<h2>Withdrawal Portal</h2>
+<p style="color: var(--secondary); margin-bottom: 20px;">Secure Institutional Transfer</p>
+<input type="text" class="trade-input" placeholder="Bank Name">
+<input type="number" class="trade-input" id="withdraw-val" placeholder="Amount ($)">
+<button class="btn btn-buy" onclick="goToVerify()">AUTHORIZE TRANSFER</button>
+<p onclick="closeModal()" style="margin-top: 15px; cursor: pointer; color: var(--secondary);">Cancel</p>
+</div>
+
+<div id="verify-modal" class="modal" style="display: none;">
+<div style="font-size: 3rem; margin-bottom: 10px;">🔐</div>
+<h2>Verification Required</h2>
+<p style="color: var(--secondary); font-size: 0.9rem;">Enter the 6-digit code sent to your registered device for <strong>Thomas Graziani</strong>.</p>
+
+<div class="otp-container">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+</div>
+
+<p id="error-msg" style="color: var(--danger); font-size: 0.8rem; display: none; margin-bottom: 15px;">Incorrect verification code. Please try again.</p>
+<button class="btn btn-buy" onclick="checkCode()">VERIFY & COMPLETE</button>
+</div>
+
+<div id="success-modal" class="modal" style="display: none;">
+<div style="font-size: 4rem; color: var(--primary); margin-bottom: 15px;">⏳</div>
+<h2>Transfer Initialized</h2>
+<p style="color: var(--secondary); line-height: 1.6; margin-bottom: 30px;">Verification pending for Thomas Graziani. For institutional safety, please go back to the home page to monitor authorization status.</p>
+<button class="btn btn-buy" onclick="returnHome()">RETURN TO DASHBOARD</button>
+</div>
+</div>
+
+<script>
+        let balance = 120000000.00;
+        let pendingAmount = 0;
+
+        function updateDisplay() {
+            document.getElementById('main-balance').innerText = "$" + (balance - pendingAmount).toLocaleString(undefined, {minimumFractionDigits: 2});
+            if (pendingAmount > 0) {
+                document.getElementById('pending-bar').style.display = 'block';
+                document.getElementById('pending-bar').innerText = `⚠️ TRANSACTION PENDING: $${pendingAmount.toLocaleString()} is awaiting verification`;
+            }
+        }
+
+        function executeTrade(type) {
+            const amt = parseFloat(document.getElementById('trade-amt').value);
+            if (isNaN(amt) || amt <= 0) return;
+            type === 'BUY' ? balance += amt : (amt <= balance ? balance -= amt : alert("Insufficient Balance"));
+            updateDisplay();
+            document.getElementById('trade-amt').value = "";
+        }
+
+        function openModal() {
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('withdraw-modal').style.display = 'block';
+            document.getElementById('verify-modal').style.display = 'none';
+            document.getElementById('success-modal').style.display = 'none';
+        }
+
+        function goToVerify() {
+            const val = parseFloat(document.getElementById('withdraw-val').value);
+            if(isNaN(val) || val <= 0 || val > balance) return alert("Invalid Amount");
+            pendingAmount = val;
+            document.getElementById('withdraw-modal').style.display = 'none';
+            document.getElementById('verify-modal').style.display = 'block';
+        }
+
+        function checkCode() {
+            document.getElementById('error-msg').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('verify-modal').style.display = 'none';
+                document.getElementById('success-modal').style.display = 'block';
+            }, 1000);
+        }
+
+        function returnHome() {
+            updateDisplay();
+            closeModal();
+        }
+
+        function closeModal() { document.getElementById('overlay').style.display = 'none'; }
+
+        // Live Ticker
+        setInterval(() => {
+            const price = 98000 + (Math.random() * 500);
+            document.getElementById('live-price').innerText = "$" + price.toLocaleString(undefined, {minimumFractionDigits: 2});
+        }, 3000);
+</script>
+</body>
+</html>
+
