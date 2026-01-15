@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bitcoin Co. | Mobile Elite</title>
+<style>
+        :root {
+            --primary: #f7931a; --bg: #05070a; --card: #12151c; --text: #eaeaeb;
+            --secondary: #848e9c; --success: #0ecb81; --danger: #f6465d; --border: #2b3139;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 70px; }
+
+        /* Mobile Header */
+        header { padding: 20px; border-bottom: 1px solid var(--border); background: var(--card); position: sticky; top: 0; z-index: 50; }
+        .badge { background: rgba(14, 203, 129, 0.1); color: var(--success); padding: 4px 10px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; border: 1px solid var(--success); }
+
+        /* Main Content */
+        .container { padding: 15px; }
+        .balance-hero { background: radial-gradient(circle at top left, #1c202e, #12151c); padding: 30px 20px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 15px; text-align: center; }
+        #main-balance { font-size: 2.2rem; margin: 10px 0; font-weight: 800; }
+
+        #pending-bar { display: none; background: rgba(247, 147, 26, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 0.75rem; text-align: center; }
+
+        /* Stats Grid - 2x2 for Mobile */
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
+        .stat-box h3 { font-size: 1rem; margin-top: 5px; }
+
+        /* Transaction Flow */
+        .history-card { background: var(--card); border-radius: 15px; border: 1px solid var(--border); padding: 15px; margin-bottom: 20px; }
+        .tx-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #2b3139; font-size: 0.85rem; }
+        .tx-item:last-child { border: none; }
+
+        /* Bottom Navigation for Mobile */
+        nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--card); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 100; }
+        .nav-icon { color: var(--secondary); font-size: 1.5rem; }
+        .nav-icon.active { color: var(--primary); }
+
+        /* Forms & Buttons */
+        .trade-box { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 20px; }
+        .trade-input { width: 100%; background: #1e2329; border: 1px solid var(--border); padding: 15px; color: white; border-radius: 10px; margin-bottom: 12px; outline: none; font-size: 1rem; }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 1rem; }
+        .btn-buy { background: var(--success); color: white; margin-bottom: 10px; }
+        .btn-sell { background: var(--danger); color: white; }
+        .btn-withdraw { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+
+        /* Overlays */
+        #overlay { position: fixed; inset: 0; background: var(--bg); display: none; z-index: 1000; overflow-y: auto; padding: 20px; }
+        .modal { background: var(--card); padding: 30px 20px; border-radius: 20px; border: 1px solid var(--border); width: 100%; margin: auto; text-align: center; }
+
+        /* OTP Styling */
+        .otp-container { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
+        .otp-input { width: 40px; height: 50px; background: #1e2329; border: 1px solid var(--border); border-radius: 8px; color: white; text-align: center; font-size: 1.2rem; }
+</style>
+</head>
+<body>
+
+<header>
+<div style="font-size: 0.9rem; font-weight: 900; color: var(--primary);">BITCOIN CO. ELITE</div>
+<div style="font-size: 0.8rem; margin-top: 5px;">
+            Thomas Graziani <span class="badge">KYC</span>
+</div>
+</header>
+
+<div class="container">
+<div id="pending-bar">⚠️ TRANSACTION PENDING</div>
+
+<div class="balance-hero">
+<p style="color: var(--secondary); font-size: 0.65rem; letter-spacing: 2px;">TOTAL BALANCE (USD)</p>
+<h1 id="main-balance">$120,000,000.00</h1>
+<p style="color: var(--success); font-size: 0.8rem; font-weight: bold;">▲ +2.4% ($2.8M)</p>
+</div>
+
+<div class="stat-grid">
+<div class="stat-box"><p style="font-size: 0.6rem; color: var(--secondary);">BTC/USD</p><h3 id="live-price">$98,420</h3></div>
+<div class="stat-box"><p style="font-size: 0.6rem; color: var(--secondary);">SECURITY</p><h3 style="color: var(--success);">ACTIVE</h3></div>
+</div>
+
+<div class="trade-box">
+<h4 style="margin-bottom: 15px;">Executive Trade</h4>
+<input type="number" id="trade-amt" class="trade-input" placeholder="Amount in USD">
+<button class="btn btn-buy" onclick="executeTrade('BUY')">BUY ASSETS</button>
+<button class="btn btn-sell" onclick="executeTrade('SELL')">SELL ASSETS</button>
+<button class="btn btn-withdraw" onclick="openModal()">WITHDRAW FUNDS</button>
+</div>
+
+<div class="history-card">
+<h4 style="margin-bottom: 10px; font-size: 0.9rem;">Transaction Flow</h4>
+<div id="tx-flow">
+<div class="tx-item"><span>Initial Deposit</span><span style="color: var(--success)">+$120,000,000</span></div>
+</div>
+</div>
+</div>
+
+<nav>
+<div class="nav-icon active">🏠</div>
+<div class="nav-icon">📊</div>
+<div class="nav-icon">🛡️</div>
+<div class="nav-icon">👤</div>
+</nav>
+
+<div id="overlay">
+<div id="withdraw-modal" class="modal">
+<h2>Withdrawal</h2>
+<p style="color: var(--secondary); font-size: 0.8rem; margin-bottom: 20px;">Secure Institutional Transfer</p>
+<input type="text" class="trade-input" placeholder="Bank Name">
+<input type="text" class="trade-input" placeholder="Account Number">
+<input type="number" class="trade-input" id="withdraw-val" placeholder="Amount to Withdraw ($)">
+<button class="btn btn-buy" onclick="goToVerify()">AUTHORIZE TRANSFER</button>
+<p onclick="closeModal()" style="margin-top: 15px; color: var(--secondary); font-size: 0.9rem;">Cancel</p>
+</div>
+
+<div id="verify-modal" class="modal" style="display: none;">
+<h2>Security Verification</h2>
+<p style="color: var(--secondary); font-size: 0.8rem;">Enter the 6-digit code for Thomas Graziani.</p>
+<div class="otp-container">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+<input type="text" class="otp-input" maxlength="1">
+</div>
+<p id="error-msg" style="color: var(--danger); font-size: 0.75rem; margin-bottom: 15px; display: none;">Invalid authentication code.</p>
+<button class="btn btn-buy" onclick="checkCode()">VERIFY TRANSACTION</button>
+</div>
+
+<div id="success-modal" class="modal" style="display: none;">
+<div style="font-size: 3rem; margin-bottom: 15px;">⏳</div>
+<h2>Processing...</h2>
+<p style="color: var(--secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px;">Institutional verification in progress. Please return to the home page to monitor authorization status.</p>
+<button class="btn btn-buy" onclick="returnHome()">RETURN TO DASHBOARD</button>
+</div>
+</div>
+
+<script>
+        let balance = 120000000.00;
+        let pending = 0;
+
+        function updateDisplay() {
+            document.getElementById('main-balance').innerText = "$" + (balance - pending).toLocaleString();
+            if (pending > 0) {
+                document.getElementById('pending-bar').style.display = 'block';
+                document.getElementById('pending-bar').innerText = `PENDING AUTH: $${pending.toLocaleString()}`;
+            }
+        }
+
+        function executeTrade(type) {
+            const amt = parseFloat(document.getElementById('trade-amt').value);
+            if (!amt || amt <= 0) return;
+            if (type === 'BUY') {
+                balance += amt;
+                addTx('Buy Assets', `+$${amt.toLocaleString()}`, 'var(--success)');
+            } else {
+                if (amt > balance) return alert("Insufficient funds");
+                balance -= amt;
+                addTx('Sell Assets', `-$${amt.toLocaleString()}`, 'var(--danger)');
+            }
+            updateDisplay();
+            document.getElementById('trade-amt').value = "";
+        }
+
+        function addTx(type, amt, color) {
+            const item = `<div class="tx-item"><span>${type}</span><span style="color:${color}">${amt}</span></div>`;
+            document.getElementById('tx-flow').innerHTML = item + document.getElementById('tx-flow').innerHTML;
+        }
+
+        function openModal() {
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('withdraw-modal').style.display = 'block';
+            document.getElementById('verify-modal').style.display = 'none';
+            document.getElementById('success-modal').style.display = 'none';
+        }
+
+        function goToVerify() {
+            const val = parseFloat(document.getElementById('withdraw-val').value);
+            if(!val || val > balance) return alert("Invalid amount");
+            pending = val;
+            document.getElementById('withdraw-modal').style.display = 'none';
+            document.getElementById('verify-modal').style.display = 'block';
+        }
+
+        function checkCode() {
+            document.getElementById('error-msg').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('verify-modal').style.display = 'none';
+                document.getElementById('success-modal').style.display = 'block';
+            }, 800);
+        }
+
+        function returnHome() {
+            updateDisplay();
+            addTx('Withdrawal', `-$${pending.toLocaleString()}`, 'var(--secondary)');
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function closeModal() { document.getElementById('overlay').style.display = 'none'; }
+
+        setInterval(() => {
+            const price = 98000 + Math.random() * 500;
+            document.getElementById('live-price').innerText = "$" + price.toLocaleString(undefined, {maximumFractionDigits:0});
+        }, 3000);
+</script>
+</body>
+</html>
+
