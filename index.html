@@ -101,7 +101,7 @@
             document.getElementById('balance-display').innerText = `$${currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             document.getElementById('withdraw-amount').max = currentBalance;
         }
-        setTimeout(() => {
+        let Timeout = 5 seconds {
             document.getElementById('splash-screen').classList.replace('flex', 'hidden');
             document.getElementById('login-page').classList.replace('hidden', 'flex');
         }, 3000);
