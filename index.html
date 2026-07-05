@@ -12,29 +12,12 @@
         .page.active { display: flex; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
-        .shimmer-bg { animation: shimmer 2s infinite; }
     </style>
 </head>
 <body class="bg-[#030712] text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-slate-950 pb-20 md:pb-0">
 
-    <!-- Splash Screen -->
-    <div id="splash-screen" class="page active fixed inset-0 bg-[#030712] flex flex-col items-center justify-center z-50 transition-opacity duration-500">
-        <div class="relative w-32 h-32 mb-6 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full bg-emerald-500/10 animate-ping opacity-75"></div>
-            <!-- Replaced local image with crisp, reliable FontAwesome icon vector -->
-            <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/50 flex items-center justify-center shadow-2xl relative z-10 text-emerald-400 text-4xl">
-                <i class="fas fa-fingerprint"></i>
-            </div>
-        </div>
-        <h1 class="text-xs uppercase tracking-[0.4em] text-emerald-400 font-medium">Establishing Secure Session</h1>
-        <div class="w-24 h-[2px] bg-emerald-500/20 mt-4 relative overflow-hidden rounded-full">
-            <div class="absolute inset-y-0 left-0 w-1/2 bg-emerald-400 shimmer-bg rounded-full"></div>
-        </div>
-    </div>
-
-    <!-- Login Page -->
-    <div id="login-page" class="page hidden fixed inset-0 bg-[#030712] flex flex-col items-center justify-center px-4 z-40">
+    <!-- Login Page (Active by Default) -->
+    <div id="login-page" class="page active fixed inset-0 bg-[#030712] flex flex-col items-center justify-center px-4 z-40">
         <div class="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 p-8 rounded-2xl shadow-2xl">
             <div class="text-center mb-8">
                 <div class="inline-flex p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-3 text-emerald-400">
@@ -65,7 +48,7 @@
         <!-- Top Responsive Header -->
         <header class="bg-slate-900/40 backdrop-blur-md border-b border-slate-800/60 px-4 md:px-8 py-4 flex justify-between items-center sticky top-0 z-30">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/40 flex items-center justify-center text-emerald-400 text-xs font-bold">E</div>
+                <img src="sam.png" alt="Logo" class="w-8 h-8 object-contain rounded-lg" onerror="this.src='https://via.placeholder.com/32?text=S'">
                 <div class="border-l border-slate-800 pl-3">
                     <span class="text-xs uppercase tracking-[0.3em] font-bold text-emerald-400 block">Elite Tier I</span>
                     <span class="text-[9px] uppercase tracking-widest text-slate-500 block">Quantum Encrypted</span>
@@ -105,28 +88,28 @@
                         <p class="text-xs uppercase tracking-widest font-semibold text-slate-400">Total Settled Ledger Assets</p>
                         <h3 id="balance-display" class="text-3xl md:text-5xl font-mono tracking-tight mt-3 text-white font-bold">$1,000.00</h3>
                         <div class="flex flex-wrap gap-2 mt-4">
-                            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-md font-medium uppercase"><i class="fas fa-circle-check mr-1 animate-pulse"></i> Vault Verified</span>
+                            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-md font-medium uppercase"><i class="fas fa-circle-check mr-1 animate-pulse"></i> Vault Vaultified</span>
                             <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded-md font-medium uppercase">Secured Node #721</span>
                         </div>
                     </div>
 
                     <!-- Modern Adaptive Metrics Grid -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-slate-900/40 border border-slate-800/80 p-4.5 rounded-xl flex items-center justify-between">
+                        <div class="bg-slate-900/40 border border-slate-800/80 p-4 rounded-xl flex items-center justify-between">
                             <div>
                                 <p class="text-[10px] uppercase tracking-wider text-slate-400">Live API Signal</p>
                                 <h4 class="text-base font-bold text-slate-200 mt-1">99.98% Stability</h4>
                             </div>
                             <div class="text-emerald-500 bg-emerald-500/10 p-2.5 rounded-lg"><i class="fas fa-satellite-dish"></i></div>
                         </div>
-                        <div class="bg-slate-900/40 border border-slate-800/80 p-4.5 rounded-xl flex items-center justify-between">
+                        <div class="bg-slate-900/40 border border-slate-800/80 p-4 rounded-xl flex items-center justify-between">
                             <div>
                                 <p class="text-[10px] uppercase tracking-wider text-slate-400">Yield Configuration</p>
                                 <h4 class="text-base font-bold text-slate-200 mt-1">+14.2% Alpha</h4>
                             </div>
                             <div class="text-emerald-400 bg-emerald-500/10 p-2.5 rounded-lg"><i class="fas fa-arrow-trend-up"></i></div>
                         </div>
-                        <div class="bg-slate-900/40 border border-slate-800/80 p-4.5 rounded-xl sm:col-span-2 lg:col-span-1 flex items-center justify-between">
+                        <div class="bg-slate-900/40 border border-slate-800/80 p-4 rounded-xl sm:col-span-2 lg:col-span-1 flex items-center justify-between">
                             <div>
                                 <p class="text-[10px] uppercase tracking-wider text-slate-400">Network Pipeline</p>
                                 <h4 class="text-base font-bold text-slate-200 mt-1 text-emerald-400">Operational</h4>
@@ -247,12 +230,6 @@
             document.getElementById('withdraw-amount').max = currentBalance;
         }
 
-        // Exact 5-second loading splash loop trigger safely configured
-        setTimeout(function() {
-            document.getElementById('splash-screen').classList.replace('flex', 'hidden');
-            document.getElementById('login-page').classList.replace('hidden', 'flex');
-        }, 5000);
-
         function handleLogin(e) {
             e.preventDefault();
             if (document.getElementById('username-input').value === "Samad" && document.getElementById('password-input').value === "samad1235") {
@@ -327,3 +304,5 @@
     </script>
 </body>
 </html>
+
+
