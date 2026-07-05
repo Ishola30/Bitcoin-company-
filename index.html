@@ -1,39 +1,43 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Asset Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Enterprise Asset Management | Elite Tier</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .page { display: none; }
         .page.active { display: flex; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+        .shimmer-bg { animation: shimmer 2s infinite; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-slate-950">
+<body class="bg-[#030712] text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-slate-950 pb-20 md:pb-0">
 
-    <div id="splash-screen" class="page active fixed inset-0 bg-slate-950 flex flex-col items-center justify-center z-50 transition-opacity duration-500">
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="page active fixed inset-0 bg-[#030712] flex flex-col items-center justify-center z-50 transition-opacity duration-500">
         <div class="relative w-32 h-32 mb-6 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full bg-emerald-500/10 animate-ping opacity-75"></div>
             <img src="sam.png" alt="Portal Logo" class="w-28 h-28 object-contain relative z-10 rounded-xl shadow-2xl" onerror="this.src='https://via.placeholder.com/112?text=Logo'">
         </div>
-        <h1 class="text-xs uppercase tracking-[0.4em] text-slate-400 font-medium">Securing Connection</h1>
-        <div class="w-16 h-[2px] bg-emerald-500/30 mt-3 relative overflow-hidden rounded-full">
-            <div class="absolute inset-y-0 left-0 w-1/2 bg-emerald-400 animate-[shimmer_1.5s_infinite] rounded-full"></div>
+        <h1 class="text-xs uppercase tracking-[0.4em] text-emerald-400 font-medium">Establishing Secure Session</h1>
+        <div class="w-24 h-[2px] bg-emerald-500/20 mt-4 relative overflow-hidden rounded-full">
+            <div class="absolute inset-y-0 left-0 w-1/2 bg-emerald-400 shimmer-bg rounded-full"></div>
         </div>
     </div>
 
-    <style>
-        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
-    </style>
-
-    <div id="login-page" class="page hidden fixed inset-0 bg-slate-950 flex-col items-center justify-center px-4">
-        <div class="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-2xl">
+    <!-- Login Page -->
+    <div id="login-page" class="page hidden fixed inset-0 bg-[#030712] flex flex-col items-center justify-center px-4 z-40">
+        <div class="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 p-8 rounded-2xl shadow-2xl">
             <div class="text-center mb-8">
-                <h2 class="text-2xl font-semibold tracking-tight text-white">Authorized Access Only</h2>
-                <p class="text-sm text-slate-400 mt-1">Please enter your credentials to clear encryption.</p>
+                <div class="inline-flex p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-3 text-emerald-400">
+                    <i class="fas fa-shield-halved text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold tracking-tight text-white">Elite Asset Portal</h2>
+                <p class="text-xs text-slate-400 mt-1.5 uppercase tracking-wider">Institutional Vault Clearance</p>
             </div>
             <div id="login-error" class="hidden bg-rose-950/40 border border-rose-800 text-rose-300 text-xs p-3 rounded-lg mb-4 flex items-center gap-2">
                 <i class="fas fa-exclamation-triangle"></i> <span>Invalid credentials. Access Denied.</span>
@@ -47,64 +51,204 @@
                     <label class="block text-xs uppercase tracking-wider text-slate-400 mb-1.5 font-medium">Password</label>
                     <input type="password" id="password-input" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold py-2.5 rounded-lg transition duration-200 mt-2 text-sm shadow-lg shadow-emerald-900/20">Authenticate</button>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-lg transition duration-200 mt-2 text-sm shadow-lg shadow-emerald-500/10">Authenticate Portal</button>
             </form>
         </div>
     </div>
 
+    <!-- App Main Interface Container -->
     <div id="app-content" class="hidden flex-1 flex-col">
-        <header class="bg-slate-900/50 backdrop-blur-md border-b border-slate-800/80 px-6 py-4 flex justify-between items-center sticky top-0 z-40">
+        <!-- Top Responsive Header -->
+        <header class="bg-slate-900/40 backdrop-blur-md border-b border-slate-800/60 px-4 md:px-8 py-4 flex justify-between items-center sticky top-0 z-30">
             <div class="flex items-center space-x-3">
-                <img src="sam.png" alt="Logo" class="w-7 h-7 object-contain rounded" onerror="this.src='https://via.placeholder.com/28?text=S'">
-                <span class="text-xs uppercase tracking-[0.3em] font-semibold text-slate-300 border-l border-slate-700 pl-3 hidden sm:inline">Clearance Tier I</span>
-            </div>
-            <div class="flex items-center space-x-6">
-                <div class="text-right">
-                    <p class="text-[10px] uppercase tracking-wider text-slate-500">Account Holder</p>
-                    <p id="user-display" class="font-medium text-sm text-slate-200">Joe don</p>
+                <img src="sam.png" alt="Logo" class="w-8 h-8 object-contain rounded-lg" onerror="this.src='https://via.placeholder.com/32?text=S'">
+                <div class="border-l border-slate-800 pl-3">
+                    <span class="text-xs uppercase tracking-[0.3em] font-bold text-emerald-400 block">Elite Tier I</span>
+                    <span class="text-[9px] uppercase tracking-widest text-slate-500 block">Quantum Encrypted</span>
                 </div>
-                <button onclick="logout()" class="bg-slate-900 hover:bg-rose-950/30 text-slate-400 hover:text-rose-400 p-2.5 rounded-lg transition border border-slate-800"><i class="fas fa-power-off text-sm"></i></button>
+            </div>
+            <div class="flex items-center space-x-4 md:space-x-6">
+                <div class="text-right">
+                    <p class="text-[9px] uppercase tracking-wider text-slate-500 font-medium">Account Holder</p>
+                    <p id="user-display" class="font-semibold text-sm text-slate-200">Samad</p>
+                </div>
+                <button onclick="logout()" class="bg-slate-900 hover:bg-rose-950/20 text-slate-400 hover:text-rose-400 p-2.5 rounded-xl transition border border-slate-800/80"><i class="fas fa-power-off text-sm"></i></button>
             </div>
         </header>
 
-        <main id="dashboard-page" class="page active flex-col p-6 max-w-5xl mx-auto w-full space-y-6">
-            <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800/80 p-8 rounded-2xl border border-slate-800 shadow-xl">
-                <p class="text-xs uppercase tracking-widest font-medium text-slate-400">Settled Ledger Balance</p>
-                <h3 id="balance-display" class="text-4xl font-light mt-2 text-white">$1,000.00</h3>
-            </div>
+        <div class="flex flex-1 max-w-7xl w-full mx-auto md:px-4">
+            <!-- Desktop Sidebar Navigation -->
+            <aside class="w-64 hidden md:flex flex-col py-8 px-4 space-y-2 border-r border-slate-900">
+                <button onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm transition font-medium bg-slate-900 text-emerald-400 border border-slate-800/60" data-tab="dashboard">
+                    <i class="fas fa-chart-pie w-5"></i> <span>Overview Dashboard</span>
+                </button>
+                <button onclick="switchTab('withdrawal')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm transition font-medium text-slate-400 hover:bg-slate-900/50 hover:text-slate-200" data-tab="withdrawal">
+                    <i class="fas fa-wallet w-5"></i> <span>Asset Transfer</span>
+                </button>
+                <button onclick="switchTab('analytics')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm transition font-medium text-slate-400 hover:bg-slate-900/50 hover:text-slate-200" data-tab="analytics">
+                    <i class="fas fa-line-chart w-5"></i> <span>Global Matrix</span>
+                </button>
+            </aside>
 
-            <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg">
-                <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-300 mb-4"><i class="fas fa-share-square text-emerald-500 mr-2"></i> Initiate Withdrawal</h3>
-                <form id="withdraw-form" onsubmit="handleWithdrawal(event)" class="space-y-4">
-                    <input type="number" id="withdraw-amount" required min="1" step="0.01" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500" placeholder="0.00">
-                    <button type="submit" class="w-full bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-200 py-2.5 rounded-lg transition text-sm">Execute Transfer</button>
-                </form>
-            </section>
-        </main>
+            <!-- Main Dynamic Content Pipeline Area -->
+            <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+                
+                <!-- TAB 1: OVERVIEW DASHBOARD -->
+                <div id="tab-dashboard" class="tab-content active space-y-6">
+                    <!-- Premium Balance Box Layout -->
+                    <div class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/20 p-6 md:p-8 rounded-2xl border border-slate-800/80 shadow-2xl">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-7xl text-emerald-500 pointer-events-none"><i class="fas fa-vault"></i></div>
+                        <p class="text-xs uppercase tracking-widest font-semibold text-slate-400">Total Settled Ledger Assets</p>
+                        <h3 id="balance-display" class="text-3xl md:text-5xl font-mono tracking-tight mt-3 text-white font-bold">$1,000.00</h3>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-md font-medium uppercase"><i class="fas fa-circle-check mr-1 animate-pulse"></i> Vault Vaultified</span>
+                            <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded-md font-medium uppercase">Secured Node #721</span>
+                        </div>
+                    </div>
 
-        <main id="progress-page" class="page hidden flex-col p-6 max-w-md mx-auto w-full items-center justify-center text-center space-y-6">
-            <div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-xl w-full">
-                <div class="text-amber-500 text-3xl mb-4 animate-pulse"><i class="fas fa-shield-halved"></i></div>
-                <h3 class="text-lg font-semibold text-white">Clearing Pipeline Active</h3>
-                <div class="w-full bg-slate-950 rounded-full h-3 my-4 overflow-hidden border border-slate-800">
-                    <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-3" style="width: 40%"></div>
+                    <!-- Modern Adaptive Metrics Grid -->
+                    <div class="grid grid-columns-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-slate-900/40 border border-slate-800/80 p-4.5 rounded-xl flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wider text-slate-400">Live API Signal</p>
+                                <h4 class="text-base font-bold text-slate-200 mt-1">99.98% Stability</h4>
+                            </div>
+                            <div class="text-emerald-500 bg-emerald-500/10 p-2.5 rounded-lg"><i class="fas fa-satellite-dish"></i></div>
+                        </div>
+                        <div class="bg-slate-900/40 border border-slate-800/80 p-4.5 rounded-xl flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wider text-slate-400">Yield Configuration</p>
+                                <h4 class="text-base font-bold text-slate-200 mt-1">+14.2% Alpha</h4>
+                            </div>
+                            <div class="text-emerald-400 bg-emerald-500/10 p-2.5 rounded-lg"><i class="fas fa-arrow-trend-up"></i></div>
+                        </div>
+                        <div class="bg-slate-900/40 border border-slate-800/80 p-4.5 rounded-xl sm:col-span-2 lg:col-span-1 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wider text-slate-400">Network Pipeline</p>
+                                <h4 class="text-base font-bold text-slate-200 mt-1 text-emerald-400">Operational</h4>
+                            </div>
+                            <div class="text-emerald-500 bg-emerald-500/10 p-2.5 rounded-lg"><i class="fas fa-circle-nodes"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Flow Module -->
+                    <div class="bg-slate-900/50 border border-slate-800/60 rounded-xl p-5 shadow-xl">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4 flex items-center"><i class="fas fa-list-check text-emerald-500 mr-2"></i> Real-Time Transaction Stream</h3>
+                        <div class="divide-y divide-slate-800/60 overflow-hidden text-xs" id="tx-log-container">
+                            <div class="py-3 flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <span class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><i class="fas fa-arrow-down-long"></i></span>
+                                    <div>
+                                        <p class="font-medium text-slate-200">Inbound Liquidity Provision</p>
+                                        <p class="text-[10px] text-slate-500">System Settlement</p>
+                                    </div>
+                                </div>
+                                <span class="font-mono text-emerald-400 font-bold">+$1,000.00</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <blockquote class="bg-amber-950/20 border-l-2 border-amber-500 text-amber-200/80 p-3.5 text-xs text-left mb-6">Verification will be completed in <strong>1 month</strong>.</blockquote>
-                <button onclick="goToDashboard()" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 py-2 rounded-lg border border-slate-800 text-xs">Return to Dashboard</button>
-            </div>
-        </main>
+
+                <!-- TAB 2: ASSET TRANSFER -->
+                <div id="tab-withdrawal" class="tab-content hidden space-y-6">
+                    <section class="bg-slate-900/80 max-w-xl mx-auto p-6 md:p-8 rounded-2xl border border-slate-800/80 shadow-2xl">
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold text-white flex items-center"><i class="fas fa-share-square text-emerald-500 mr-2"></i> Initiate Clearing Protocol</h3>
+                            <p class="text-xs text-slate-400 mt-1">Funds are pushed instantly through clearing arrays.</p>
+                        </div>
+                        <form id="withdraw-form" onsubmit="handleWithdrawal(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-[11px] uppercase tracking-wider text-slate-400 mb-1.5 font-medium">Destination Routing Method</label>
+                                <select required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                                    <option value="chase">Tier-1 Fedwire Clearing System</option>
+                                    <option value="swiss">Swiss Security Custody Account</option>
+                                    <option value="crypto">Offshore Hardware Cold Array Network</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] uppercase tracking-wider text-slate-400 mb-1.5 font-medium">Allocation Capital Value (USD)</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 font-mono text-sm">$</div>
+                                    <input type="number" id="withdraw-amount" required min="1" step="0.01" class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-emerald-500" placeholder="0.00">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-lg transition text-sm mt-4 shadow-lg shadow-emerald-500/10">Execute Global Transfer</button>
+                        </form>
+                    </section>
+                </div>
+
+                <!-- TAB 3: GLOBAL MATRIX -->
+                <div id="tab-analytics" class="tab-content hidden space-y-6">
+                    <div class="bg-slate-900/50 border border-slate-800/60 p-6 rounded-2xl shadow-xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200">Global Signal Vectors</h3>
+                                <p class="text-xs text-slate-500">Asset distribution performance spectrum</p>
+                            </div>
+                            <span class="text-xs bg-slate-800 px-2.5 py-1 rounded-md text-emerald-400 font-mono">Live Sync</span>
+                        </div>
+                        <!-- Responsive Matrix Graph Container -->
+                        <div class="h-48 flex items-end justify-between gap-2 pt-4 border-b border-slate-800/80 font-mono text-[10px] text-slate-500">
+                            <div class="w-full bg-slate-800/40 rounded-t h-[40%] relative group transition-all hover:bg-emerald-500/20"><div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-slate-950 text-emerald-400 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Q1</div></div>
+                            <div class="w-full bg-slate-800/40 rounded-t h-[65%] relative group transition-all hover:bg-emerald-500/20"><div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-slate-950 text-emerald-400 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Q2</div></div>
+                            <div class="w-full bg-slate-800/40 rounded-t h-[50%] relative group transition-all hover:bg-emerald-500/20"><div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-slate-950 text-emerald-400 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Q3</div></div>
+                            <div class="w-full bg-slate-800/40 rounded-t h-[85%] relative group transition-all hover:bg-emerald-500/20"><div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-slate-950 text-emerald-400 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Q4</div></div>
+                            <div class="w-full bg-emerald-500/20 rounded-t h-[95%] relative group border-t-2 border-emerald-500"><div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-emerald-400 text-slate-950 font-bold px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">CURR</div></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-400 mt-2 font-mono px-1">
+                            <span>M1</span><span>M2</span><span>M3</span><span>M4</span><span>Active Alpha</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PIPELINE PROGRESS INTERACTIVE CARD (Triggered from transfer) -->
+                <div id="progress-card" class="hidden flex-col max-w-md mx-auto w-full items-center justify-center text-center py-10 space-y-6">
+                    <div class="bg-slate-900 p-8 rounded-2xl border border-slate-800/80 shadow-2xl w-full">
+                        <div class="text-amber-500 text-4xl mb-4 animate-pulse"><i class="fas fa-shield-halved"></i></div>
+                        <h3 class="text-lg font-bold text-white">Clearing Pipeline Active</h3>
+                        <p class="text-xs text-slate-400 mt-1">Verifying cryptographic hash arrays</p>
+                        <div class="w-full bg-slate-950 rounded-full h-3 my-5 overflow-hidden border border-slate-800/80">
+                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-3 w-[45%]"></div>
+                        </div>
+                        <blockquote class="bg-amber-950/20 border-l-2 border-amber-500 text-amber-300 text-xs text-left p-4 rounded-r-xl mb-6 leading-relaxed">
+                            Transfer locked inside security holding structure. Verification will fully settle in exactly <strong>1 month</strong>.
+                        </blockquote>
+                        <button onclick="closeProgressPipeline()" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 py-2.5 rounded-lg border border-slate-800 text-xs font-medium transition">Return to Dashboard</button>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- Bottom Responsive Mobile Tab Bar Layout -->
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/80 backdrop-blur-lg border-t border-slate-800/80 h-16 flex items-center justify-around px-2 z-30">
+            <button onclick="switchTab('dashboard')" class="mobile-nav-btn flex flex-col items-center justify-center text-emerald-400 flex-1 h-full" data-tab="dashboard">
+                <i class="fas fa-chart-pie text-lg"></i><span class="text-[9px] mt-1 font-medium">Overview</span>
+            </button>
+            <button onclick="switchTab('withdrawal')" class="mobile-nav-btn flex flex-col items-center justify-center text-slate-500 flex-1 h-full" data-tab="withdrawal">
+                <i class="fas fa-wallet text-lg"></i><span class="text-[9px] mt-1 font-medium">Transfer</span>
+            </button>
+            <button onclick="switchTab('analytics')" class="mobile-nav-btn flex flex-col items-center justify-center text-slate-500 flex-1 h-full" data-tab="analytics">
+                <i class="fas fa-line-chart text-lg"></i><span class="text-[9px] mt-1 font-medium">Matrix</span>
+            </button>
+        </nav>
     </div>
 
     <script>
         let currentBalance = 1000.00;
+
         function updateBalanceUI() {
-            document.getElementById('balance-display').innerText = `$${currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            const formatted = `$${currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('balance-display').innerText = formatted;
             document.getElementById('withdraw-amount').max = currentBalance;
         }
-        let Timeout = 5 seconds {
+
+        // Exact 5-second loading splash framework transformation loop
+        setTimeout(function() {
             document.getElementById('splash-screen').classList.replace('flex', 'hidden');
             document.getElementById('login-page').classList.replace('hidden', 'flex');
-        }, 3000);
+        }, 5000);
+
         function handleLogin(e) {
             e.preventDefault();
             if (document.getElementById('username-input').value === "Samad" && document.getElementById('password-input').value === "samad1235") {
@@ -115,26 +259,76 @@
                 document.getElementById('login-error').classList.replace('hidden', 'flex');
             }
         }
+
+        function switchTab(tabId) {
+            // Hide progress tracking view if switching screens manually
+            document.getElementById('progress-card').classList.replace('flex', 'hidden');
+            
+            // Toggle Content Target Modules
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Synchronize Desktop Active Button Styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('bg-slate-900', 'text-emerald-400', 'border', 'border-slate-800/60');
+                    btn.classList.remove('text-slate-400', 'hover:bg-slate-900/50');
+                } else {
+                    btn.classList.remove('bg-slate-900', 'text-emerald-400', 'border', 'border-slate-800/60');
+                    btn.classList.add('text-slate-400', 'hover:bg-slate-900/50');
+                }
+            });
+
+            // Synchronize Mobile Bottom Navigation Icon Elements
+            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+                if(btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.replace('text-slate-500', 'text-emerald-400');
+                } else {
+                    btn.classList.replace('text-emerald-400', 'text-slate-500');
+                }
+            });
+        }
+
         function handleWithdrawal(e) {
             e.preventDefault();
             const amt = parseFloat(document.getElementById('withdraw-amount').value);
             if (amt > 0 && amt <= currentBalance) {
                 currentBalance -= amt;
-                document.getElementById('dashboard-page').classList.replace('flex', 'hidden');
-                document.getElementById('progress-page').classList.replace('hidden', 'flex');
+                
+                // Track dynamic ledger listing entry inject
+                const container = document.getElementById('tx-log-container');
+                const row = `
+                    <div class="py-3 flex justify-between items-center border-t border-slate-800/60">
+                        <div class="flex items-center space-x-3">
+                            <span class="p-2 bg-amber-500/10 rounded-lg text-amber-400"><i class="fas fa-clock"></i></span>
+                            <div>
+                                <p class="font-medium text-slate-200">Outbound Escrow Dispatch</p>
+                                <p class="text-[10px] text-amber-500">Pipeline Hold Status</p>
+                            </div>
+                        </div>
+                        <span class="font-mono text-amber-500 font-bold">-$${amt.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
+                    </div>`;
+                container.innerHTML = row + container.innerHTML;
+
+                // Toggle interface views to target pipeline cards directly
+                document.getElementById('tab-withdrawal').classList.add('hidden');
+                document.getElementById('progress-card').classList.replace('hidden', 'flex');
             }
         }
-        function goToDashboard() {
+
+        function closeProgressPipeline() {
             updateBalanceUI();
             document.getElementById('withdraw-amount').value = '';
-            document.getElementById('progress-page').classList.replace('flex', 'hidden');
-            document.getElementById('dashboard-page').classList.replace('hidden', 'flex');
+            document.getElementById('progress-card').classList.replace('flex', 'hidden');
+            switchTab('dashboard');
         }
+
         function logout() {
             location.reload();
         }
     </script>
 </body>
 </html>
+
 
 
