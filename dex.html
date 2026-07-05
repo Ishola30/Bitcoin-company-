@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Asset Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page { display: none; }
+        .page.active { display: flex; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-slate-950">
+
+    <div id="splash-screen" class="page active fixed inset-0 bg-slate-950 flex flex-col items-center justify-center z-50 transition-opacity duration-500">
+        <div class="relative w-32 h-32 mb-6 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-emerald-500/10 animate-ping opacity-75"></div>
+            <img src="sam.png" alt="Portal Logo" class="w-28 h-28 object-contain relative z-10 rounded-xl shadow-2xl" onerror="this.src='https://via.placeholder.com/112?text=Logo'">
+        </div>
+        <h1 class="text-xs uppercase tracking-[0.4em] text-slate-400 font-medium">Securing Connection</h1>
+        <div class="w-16 h-[2px] bg-emerald-500/30 mt-3 relative overflow-hidden rounded-full">
+            <div class="absolute inset-y-0 left-0 w-1/2 bg-emerald-400 animate-[shimmer_1.5s_infinite] rounded-full"></div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+    </style>
+
+    <div id="login-page" class="page hidden fixed inset-0 bg-slate-950 flex-col items-center justify-center px-4">
+        <div class="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-2xl">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-semibold tracking-tight text-white">Authorized Access Only</h2>
+                <p class="text-sm text-slate-400 mt-1">Please enter your credentials to clear encryption.</p>
+            </div>
+            <div id="login-error" class="hidden bg-rose-950/40 border border-rose-800 text-rose-300 text-xs p-3 rounded-lg mb-4 flex items-center gap-2">
+                <i class="fas fa-exclamation-triangle"></i> <span>Invalid credentials. Access Denied.</span>
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-slate-400 mb-1.5 font-medium">Username</label>
+                    <input type="text" id="username-input" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-slate-400 mb-1.5 font-medium">Password</label>
+                    <input type="password" id="password-input" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold py-2.5 rounded-lg transition duration-200 mt-2 text-sm shadow-lg shadow-emerald-900/20">Authenticate</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-content" class="hidden flex-1 flex-col">
+        <header class="bg-slate-900/50 backdrop-blur-md border-b border-slate-800/80 px-6 py-4 flex justify-between items-center sticky top-0 z-40">
+            <div class="flex items-center space-x-3">
+                <img src="sam.png" alt="Logo" class="w-7 h-7 object-contain rounded" onerror="this.src='https://via.placeholder.com/28?text=S'">
+                <span class="text-xs uppercase tracking-[0.3em] font-semibold text-slate-300 border-l border-slate-700 pl-3 hidden sm:inline">Clearance Tier I</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider text-slate-500">Account Holder</p>
+                    <p id="user-display" class="font-medium text-sm text-slate-200">Joe don</p>
+                </div>
+                <button onclick="logout()" class="bg-slate-900 hover:bg-rose-950/30 text-slate-400 hover:text-rose-400 p-2.5 rounded-lg transition border border-slate-800"><i class="fas fa-power-off text-sm"></i></button>
+            </div>
+        </header>
+
+        <main id="dashboard-page" class="page active flex-col p-6 max-w-5xl mx-auto w-full space-y-6">
+            <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800/80 p-8 rounded-2xl border border-slate-800 shadow-xl">
+                <p class="text-xs uppercase tracking-widest font-medium text-slate-400">Settled Ledger Balance</p>
+                <h3 id="balance-display" class="text-4xl font-light mt-2 text-white">$1,000.00</h3>
+            </div>
+
+            <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg">
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-300 mb-4"><i class="fas fa-share-square text-emerald-500 mr-2"></i> Initiate Withdrawal</h3>
+                <form id="withdraw-form" onsubmit="handleWithdrawal(event)" class="space-y-4">
+                    <input type="number" id="withdraw-amount" required min="1" step="0.01" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500" placeholder="0.00">
+                    <button type="submit" class="w-full bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-200 py-2.5 rounded-lg transition text-sm">Execute Transfer</button>
+                </form>
+            </section>
+        </main>
+
+        <main id="progress-page" class="page hidden flex-col p-6 max-w-md mx-auto w-full items-center justify-center text-center space-y-6">
+            <div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-xl w-full">
+                <div class="text-amber-500 text-3xl mb-4 animate-pulse"><i class="fas fa-shield-halved"></i></div>
+                <h3 class="text-lg font-semibold text-white">Clearing Pipeline Active</h3>
+                <div class="w-full bg-slate-950 rounded-full h-3 my-4 overflow-hidden border border-slate-800">
+                    <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-3" style="width: 40%"></div>
+                </div>
+                <blockquote class="bg-amber-950/20 border-l-2 border-amber-500 text-amber-200/80 p-3.5 text-xs text-left mb-6">Verification will be completed in <strong>1 month</strong>.</blockquote>
+                <button onclick="goToDashboard()" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-300 py-2 rounded-lg border border-slate-800 text-xs">Return to Dashboard</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentBalance = 1000.00;
+        function updateBalanceUI() {
+            document.getElementById('balance-display').innerText = `$${currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('withdraw-amount').max = currentBalance;
+        }
+        setTimeout(() => {
+            document.getElementById('splash-screen').classList.replace('flex', 'hidden');
+            document.getElementById('login-page').classList.replace('hidden', 'flex');
+        }, 3000);
+        function handleLogin(e) {
+            e.preventDefault();
+            if (document.getElementById('username-input').value === "Samad" && document.getElementById('password-input').value === "samad1235") {
+                document.getElementById('login-page').classList.replace('flex', 'hidden');
+                document.getElementById('app-content').classList.replace('hidden', 'flex');
+                updateBalanceUI();
+            } else {
+                document.getElementById('login-error').classList.replace('hidden', 'flex');
+            }
+        }
+        function handleWithdrawal(e) {
+            e.preventDefault();
+            const amt = parseFloat(document.getElementById('withdraw-amount').value);
+            if (amt > 0 && amt <= currentBalance) {
+                currentBalance -= amt;
+                document.getElementById('dashboard-page').classList.replace('flex', 'hidden');
+                document.getElementById('progress-page').classList.replace('hidden', 'flex');
+            }
+        }
+        function goToDashboard() {
+            updateBalanceUI();
+            document.getElementById('withdraw-amount').value = '';
+            document.getElementById('progress-page').classList.replace('flex', 'hidden');
+            document.getElementById('dashboard-page').classList.replace('hidden', 'flex');
+        }
+        function logout() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
+
+
